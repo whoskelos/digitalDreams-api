@@ -1,12 +1,13 @@
-const express  = require ('express');
+const express = require("express");
 const app = express();
-const cors = require('cors');
-const morgan = require('morgan');
+const cors = require("cors");
+const morgan = require("morgan");
+const { mongoose } = require("./database");
 
-const { mongoose } = require('./database');
+const { swaggerDocs: V1SwaggerDocs } = require("./docs/swagger");
 
 //CONFIGURACION
-app.set('port',process.env.PORT || 3000);
+app.set("port", process.env.PORT || 3000);
 
 //MIDDLEWARES
 app.use(morgan("combined"));
@@ -14,10 +15,11 @@ app.use(express.json());
 app.use(cors());
 
 //RUTAS
-app.use('/api/equipos',require('./routes/equipos.routes'))
-app.use('/api/users',require('./routes/users.routes'));
+app.use("/api/equipos", require("./routes/equipos.routes"));
+app.use("/api/users", require("./routes/users.routes"));
 
 //ARRANCAR EL SERVIDOR
-app.listen(app.get('port'), () => {
-    console.log('Server on port', app.get('port'));
+app.listen(app.get("port"), () => {
+    console.log("Server on port", app.get("port"));
+    V1SwaggerDocs(app, app.get("port"));
 });
